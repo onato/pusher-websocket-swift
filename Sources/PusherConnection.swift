@@ -7,8 +7,8 @@ public typealias PusherEventJSON = [String: AnyObject]
 
 @objcMembers
 @objc open class PusherConnection: NSObject {
-    open let url: String
-    open let key: String
+    public let url: String
+    public let key: String
     open var options: PusherClientOptions
     open var globalChannel: GlobalChannel!
     open var socketId: String?
@@ -40,8 +40,8 @@ public typealias PusherEventJSON = [String: AnyObject]
     }
 
     open lazy var reachability: Reachability? = {
-        let reachability = Reachability.init()
-        reachability?.whenReachable = { [weak self] reachability in
+        let reach = Reachability.init()
+        reach?.whenReachable = { [weak self] reachability in
             guard let strongSelf = self else {
                 print("Your Pusher instance has probably become deallocated. See https://github.com/pusher/pusher-websocket-swift/issues/109 for more information")
                 return
@@ -70,7 +70,7 @@ public typealias PusherEventJSON = [String: AnyObject]
                 return
             }
         }
-        reachability?.whenUnreachable = { [weak self] reachability in
+        reach?.whenUnreachable = { [weak self] reachability in
             guard let strongSelf = self else {
                 print("Your Pusher instance has probably become deallocated. See https://github.com/pusher/pusher-websocket-swift/issues/109 for more information")
                 return
@@ -79,7 +79,7 @@ public typealias PusherEventJSON = [String: AnyObject]
             strongSelf.delegate?.debugLog?(message: "[PUSHER DEBUG] Network unreachable")
             strongSelf.resetConnectionAndAttemptReconnect()
         }
-        return reachability
+        return reach
     }()
 
     /**
